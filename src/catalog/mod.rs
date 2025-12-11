@@ -1,3 +1,5 @@
+use arrow_schema::DataType;
+
 #[derive(Debug, PartialEq)]
 pub enum ColumType {
     Int32,
@@ -51,4 +53,19 @@ pub struct TableMetadata {
     pub name: String,
     pub columns: Vec<ColumnMetadata>,
     pub num_rows: usize,
+}
+
+pub trait IntoArrowType {
+    fn to_arrow_type(&self) -> DataType;
+}
+
+impl IntoArrowType for ColumType {
+    fn to_arrow_type(&self) -> DataType {
+        match self {
+            ColumType::Int32 => DataType::Int32,
+            ColumType::Int64 => DataType::Int64,
+            ColumType::Float64 => DataType::Float64,
+            ColumType::Bool => DataType::Boolean,
+        }
+    }
 }
